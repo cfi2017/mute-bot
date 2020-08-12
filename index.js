@@ -30,4 +30,4 @@ client.on('message', msg => {
     }
 });
 
-client.login('NzQzMjM2ODM3MDkwMzk0MTU2.XzRvPg.MIu1nJa38pjFnIDSbItngU-J1BI');
+client.login('token');
