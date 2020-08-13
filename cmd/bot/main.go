@@ -18,7 +18,7 @@ func main() {
 
 	token := viper.GetString("token")
 	if token == "" {
-		log.Fatalf("No token provided. Please run with -t <token>, a BOT_TOKEN env or a valid config file.")
+		log.Fatalf("No token provided. Please run with -t <token>, a DISCORD_TOKEN env or a valid config file.")
 	}
 
 	dg, err := discordgo.New("Bot " + viper.GetString("token"))
