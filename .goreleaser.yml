@@ -11,12 +11,21 @@ dockers:
       - "cfi2017/mute-bot:latest"
       - "cfi2017/mute-bot:{{.Tag}}"
       - "cfi2017/mute-bot:v{{.Major}}"
-    skip_push: auto
-    extra_files: []
+    # GOOS of the built binary that should be used.
+    goos: linux
+
+    # GOARCH of the built binary that should be used.
+    goarch: amd64
+
+    # GOARM of the built binary that should be used.
+    goarm: ''
+
+    # Name templates of the built binaries that should be used.
     binaries:
       - bot
-    builds:
-      - bot
+    skip_push: auto
+    extra_files: []
+    dockerfile: build/package/bot.Dockerfile
 builds:
   - env:
       - CGO_ENABLED=0
