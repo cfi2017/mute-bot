@@ -1,0 +1,4 @@
+.github
+build
+.gitignore
+.goreleaser.yml

@@ -44,7 +44,7 @@ ENV GIN_MODE=release
 
 WORKDIR /app
 COPY --from=build /code/bot /app/bot
-COPY --from=build /code/config/bot.* .
+COPY --from=build /code/config/mute-bot.* .
 USER hj:hj
 
 ENTRYPOINT ["/app/bot"]

@@ -30,6 +30,13 @@ func main() {
 	dg.AddHandler(bot.MessageCreate)
 	dg.AddHandler(bot.VoiceJoin)
 
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildVoiceStates)
+
+	err = dg.Open()
+	if err != nil {
+		log.Fatalln("Error opening Discord session: ", err)
+	}
+
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
