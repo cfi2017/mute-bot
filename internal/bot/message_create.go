@@ -6,32 +6,36 @@ import (
 	"log"
 )
 
-var Muted = false
+var muted = false
 
 func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Content != "!mute" {
 		return
 	}
 
-	Muted = !Muted
-	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Muted: %v", Muted))
+	muted = !muted
+	_, err := s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Muted: %v", muted))
 	if err != nil {
 		_, _ = s.ChannelMessageSend(m.ChannelID, "Unknown error.")
 		log.Println(err)
 		return
 	}
-	guild, err := s.Guild(m.GuildID)
+	guild, err := s.State.Guild(m.GuildID)
 	if err != nil {
 		_, _ = s.ChannelMessageSend(m.ChannelID, "Unknown error.")
 		log.Println(err)
 		return
 	}
 
+	log.Printf("%d voice states", len(guild.VoiceStates))
 	for _, state := range guild.VoiceStates {
-		err := s.GuildMemberMute(m.GuildID, state.UserID, Muted)
+		if state.Mute == muted {
+			continue
+		}
+
+		err := s.GuildMemberMute(m.GuildID, state.UserID, muted)
 		if err != nil {
 			log.Println(err)
 		}
 	}
-
 }
