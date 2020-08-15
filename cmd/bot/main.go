@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
-	"github.com/cfi2017/mute-bot/internal/bot"
-	"github.com/cfi2017/mute-bot/internal/util"
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/cfi2017/mute-bot/internal/bot"
+	"github.com/cfi2017/mute-bot/internal/util"
+	"github.com/spf13/viper"
 )
 
 func main() {
@@ -36,6 +37,8 @@ func main() {
 	if err != nil {
 		log.Fatalln("Error opening Discord session: ", err)
 	}
+
+	dg.State.TrackVoice = true
 
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
