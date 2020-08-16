@@ -1,4 +1,6 @@
 .github
+.git
+.dockerignore
 build
 .gitignore
 .goreleaser.yml
