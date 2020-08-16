@@ -33,7 +33,7 @@ COPY --from=build /etc/group /etc/group
 
 WORKDIR /app
 COPY --from=build /code/mute-bot /app/mute-bot
-COPY --from=build /code/config/mute-bot.* .
+COPY config/mute-bot.* .
 USER hj:hj
 
 ENTRYPOINT ["/app/mute-bot"]

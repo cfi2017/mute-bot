@@ -24,7 +24,8 @@ dockers:
     binaries:
       - mute-bot
     skip_push: auto
-    extra_files: []
+    extra_files:
+      - "config/mute-bot.*"
     dockerfile: build/package/bot.Dockerfile
 builds:
   - env:
@@ -51,6 +52,7 @@ archives:
       - README*
       - CHANGELOG*
       - "*.json"
+      - "config/mute-bot.*"
     format_overrides:
       - goos: windows
         format: zip
