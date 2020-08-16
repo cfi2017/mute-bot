@@ -24,7 +24,7 @@ dockers:
       - mute-bot
     skip_push: auto
     extra_files:
-      - "config/mute-bot.*"
+      - "config"
     dockerfile: build/package/bot.Dockerfile
 builds:
   - env:
