@@ -35,14 +35,5 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	log.Printf("%d voice states", len(guild.VoiceStates))
-	for _, state := range guild.VoiceStates {
-		if state.Mute == muted {
-			continue
-		}
-
-		err := s.GuildMemberMute(m.GuildID, state.UserID, muted)
-		if err != nil {
-			log.Println(err)
-		}
-	}
+	muteAll(s, guild, muted)
 }
