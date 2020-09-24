@@ -30,7 +30,7 @@ func main() {
 		timeout     = 30 * time.Second
 	)
 	handle, err := pcap.OpenLive(viper.GetString("device"), snapLength, promiscuous, timeout)
-	//handle, err := pcap.OpenOffline("among_us.pcapng")
+	// handle, err := pcap.OpenOffline("among_us.pcapng")
 	if err != nil {
 		log.Fatal("error accessing device", err)
 	}
@@ -46,9 +46,13 @@ func main() {
 
 	cooldown := time.Now().Add(-2 * time.Second)
 	for packet := range packetSource.Packets() {
+
 		// Process packet here
 		// fmt.Println(packet)
-		data := packet.Data()
+		data := packet.ApplicationLayer().Payload()
+		if len(data) <= 4 {
+			continue
+		}
 		hexData := fmt.Sprintf("%x", data)
 		meetingEndedRegexp := regexp.MustCompile("^(01).{6}(0005).{6}(80).{2}(0002)")
 		meetingStartedRegexp := regexp.MustCompile("^(01).{6}(0005).*(401c460000401c46)")
