@@ -22,7 +22,7 @@ dockers:
     # Name templates of the built binaries that should be used.
     binaries:
       - mute-bot
-    skip_push: auto
+    skip_push: false
     extra_files:
       - "config"
     dockerfile: build/package/bot.Dockerfile
