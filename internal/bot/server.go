@@ -17,7 +17,7 @@ func InitialiseServer(r *gin.Engine, s *discordgo.Session) {
 		case model.GameStartedEventType:
 			{
 				// mute all
-				g, err := s.Guild(req.GuildID)
+				g, err := s.State.Guild(req.GuildID)
 				if err != nil {
 					log.Println(err)
 					_ = c.AbortWithError(500, err)
@@ -29,7 +29,7 @@ func InitialiseServer(r *gin.Engine, s *discordgo.Session) {
 		case model.GameEndedEventType:
 			{
 				// unmute all
-				g, err := s.Guild(req.GuildID)
+				g, err := s.State.Guild(req.GuildID)
 				if err != nil {
 					log.Println(err)
 					_ = c.AbortWithError(500, err)
@@ -41,7 +41,7 @@ func InitialiseServer(r *gin.Engine, s *discordgo.Session) {
 		case model.MeetingStartedEventType:
 			{
 				// unmute all
-				g, err := s.Guild(req.GuildID)
+				g, err := s.State.Guild(req.GuildID)
 				if err != nil {
 					log.Println(err)
 					_ = c.AbortWithError(500, err)
@@ -53,7 +53,7 @@ func InitialiseServer(r *gin.Engine, s *discordgo.Session) {
 		case model.MeetingEndedEventType:
 			{
 				// mute all
-				g, err := s.Guild(req.GuildID)
+				g, err := s.State.Guild(req.GuildID)
 				if err != nil {
 					log.Println(err)
 					_ = c.AbortWithError(500, err)
