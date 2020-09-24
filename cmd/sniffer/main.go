@@ -44,7 +44,7 @@ func main() {
 	}
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
-	cooldown := time.Now().Add(-2 * time.Second)
+	endgameDetectionCooldown := time.Now().Add(-4 * time.Second)
 	for packet := range packetSource.Packets() {
 
 		// Process packet here
@@ -54,31 +54,32 @@ func main() {
 			continue
 		}
 		hexData := fmt.Sprintf("%x", data)
-		meetingEndedRegexp := regexp.MustCompile("^(01).{6}(0005).{6}(80).{2}(0002)")
 		meetingStartedRegexp := regexp.MustCompile("^(01).{6}(0005).*(401c460000401c46)")
-		if time.Since(cooldown) >= 0*time.Second {
-			if (bytes.Contains(data, []byte("EndGame")) &&
+		meetingEndedRegexp := regexp.MustCompile("^(01).{6}(0005).{6}(80).{2}(0002).*(16)$")
+		if time.Since(endgameDetectionCooldown) >= 4*time.Second &&
+			((bytes.Contains(data, []byte("EndGame")) &&
 				bytes.Equal(data[3:6], []byte{0x12, 0x00, 0x05})) ||
-				bytes.Equal(data[3:6], []byte{0x06, 0x00, 0x08}) {
-				log.Println("game ended")
-				// game ended
-				report(viper.GetString("guild_id"), model.GameEndedEventType)
-			} else if len(data) >= 200 && strings.Contains(hexData, "460000000001010101010101010101010101000000000") {
-				// game started
-				log.Println("game started")
-				report(viper.GetString("guild_id"), model.GameStartedEventType)
-			} else if len(data) <= 16 && len(data) >= 15 {
-				if meetingEndedRegexp.MatchString(hexData) {
-					// meeting ended
-					log.Println("meeting ended")
-					report(viper.GetString("guild_id"), model.MeetingEndedEventType)
-				}
-			} else if meetingStartedRegexp.MatchString(hexData) {
-				// meeting started
-				log.Println("meeting started")
-				report(viper.GetString("guild_id"), model.MeetingStartedEventType)
+				bytes.Equal(data[3:6], []byte{0x06, 0x00, 0x08})) {
+			log.Println("game ended")
+			// game ended
+			endgameDetectionCooldown = time.Now()
+			report(viper.GetString("guild_id"), model.GameEndedEventType)
+		} else if len(data) >= 200 && strings.Contains(hexData, "460000000001010101010101010101010101000000000") {
+			// game started
+			log.Println("game started")
+			report(viper.GetString("guild_id"), model.GameStartedEventType)
+		} else if len(data) <= 16 && len(data) >= 15 {
+			if meetingEndedRegexp.MatchString(hexData) {
+				// meeting ended
+				log.Println("meeting ended")
+				report(viper.GetString("guild_id"), model.MeetingEndedEventType)
 			}
+		} else if meetingStartedRegexp.MatchString(hexData) {
+			// meeting started
+			log.Println("meeting started")
+			report(viper.GetString("guild_id"), model.MeetingStartedEventType)
 		}
+
 	}
 
 	// filter packets and output commands to channel

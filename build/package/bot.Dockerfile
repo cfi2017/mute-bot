@@ -31,6 +31,7 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /etc/passwd /etc/passwd
 COPY --from=build /etc/group /etc/group
 
+EXPOSE 8080
 WORKDIR /app
 COPY --from=build /code/mute-bot /app/mute-bot
 COPY config/mute-bot.* .
