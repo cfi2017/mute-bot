@@ -33,6 +33,7 @@ COPY --from=build /etc/group /etc/group
 
 EXPOSE 8080
 WORKDIR /app
+ENV GIN_MODE=release
 COPY --from=build /code/mute-bot /app/mute-bot
 COPY config/mute-bot.* .
 USER hj:hj
